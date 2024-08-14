@@ -7,13 +7,13 @@ use RuntimeException;
 class CidrNetwork
 {
     /** @var string */
-    protected $networkAddress;
+    private $networkAddress;
 
     /** @var string */
-    protected $subnetMask;
+    private $subnetMask;
 
     /** @var string */
-    protected $broadcastAddress;
+    private $broadcastAddress;
 
     /**
      * @param  string  $ipAddress  IP Address in the network or Network address of the network.

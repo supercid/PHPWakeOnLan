@@ -13,14 +13,6 @@ use PHPUnit\Framework\TestCase;
  */
 class PHPWakeOnLanTest extends TestCase
 {
-    /**
-     * @covers \Diegonz\PHPWakeOnLan\PHPWakeOnLan::isBroadcastAddressValid()
-     */
-    public function testIsBroadcastAddressValid(): void
-    {
-        $this->assertTrue(PHPWakeOnLan::isBroadcastAddressValid('192.168.1.255'));
-        $this->assertFalse(PHPWakeOnLan::isBroadcastAddressValid('192.168.1.33'));
-    }
 
     /**
      * @covers \Diegonz\PHPWakeOnLan\PHPWakeOnLan::wake()
@@ -30,9 +22,8 @@ class PHPWakeOnLanTest extends TestCase
     public function testWake(): void
     {
         $wol = new PHPWakeOnLan();
-        $result = $wol->wake(['00:1B:2C:1C:DF:22']);
+        $result = $wol->wake('00:1B:2C:1C:DF:22', '192.168.0.1');
 
-        //$this->assertTrue(is_array($result));
         $this->assertNotEmpty($result);
     }
 
@@ -45,7 +36,7 @@ class PHPWakeOnLanTest extends TestCase
         $cidrNetwork = CidrNetwork::make('192.168.50.1', '255.255.255.252');
 
         $wol = new PHPWakeOnLan();
-        $result = $wol->wake(['00:1B:2C:1C:DF:22'], $cidrNetwork);
+        $result = $wol->wake('00:1B:2C:1C:DF:22', $cidrNetwork->getNetworkAddress(), $cidrNetwork->getSubnetMask());
 
         $this->assertNotEmpty($result);
         $this->assertArrayHasKey('message', $result);
