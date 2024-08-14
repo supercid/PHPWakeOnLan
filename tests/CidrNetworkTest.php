@@ -1,8 +1,8 @@
 <?php
 
-namespace Diegonz\PHPWakeOnLan\Tests;
+namespace SuperCid\PHPWakeOnLan\Tests;
 
-use Diegonz\PHPWakeOnLan\CidrNetwork;
+use SuperCid\PHPWakeOnLan\CidrNetwork;
 use PHPUnit\Framework\TestCase;
 
 class CidrNetworkTest extends TestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace Diegonz\PHPWakeOnLan;
+namespace SuperCid\PHPWakeOnLan;
 
 use RuntimeException;
 
@@ -10,14 +10,14 @@ use RuntimeException;
 class MagicPacket
 {
     /**
-     * @var string
+     * @var string|null
      */
-    protected $magicPacket;
+    private $magicPacket;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $macAddress;
+    private $macAddress;
 
     /**
      * MagicPacket constructor.
@@ -76,7 +76,7 @@ class MagicPacket
      *                                 format. Only 0-9 and a-f are allowed
      * @return string Built magic packet based on mac address
      */
-    protected function buildMagicPacketString(string $macAddressHex): string
+    private function buildMagicPacketString(string $macAddressHex): string
     {
         // $prefix = pack('H12', str_repeat('FF', 6));
         $prefix = str_repeat(chr(0xFF), 6);

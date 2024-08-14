@@ -1,8 +1,9 @@
 <?php
 
-namespace Diegonz\PHPWakeOnLan;
+namespace SuperCid\PHPWakeOnLan;
 
-use Diegonz\PHPWakeOnLan\Socket\UdpBroadcastSocket;
+use SuperCid\PHPWakeOnLan\Socket\UdpBroadcastSocket;
+use Exception;
 use RuntimeException;
 
 /**
@@ -11,100 +12,39 @@ use RuntimeException;
 class PHPWakeOnLan
 {
     /**
-     * @var string
-     */
-    protected $broadcastAddress = '255.255.255.255';
-
-    /**
-     * Target port to send magic packet, 7 or 9.
+     * Wake up target devices using a given mac address and IP to build magic packets
+     * and send them to broadcast address.
      *
-     * @var int
-     */
-    protected $port = 7;
-
-    /**
-     * MagicPacket array.
+     * @param string $macAddress mac address (single string) in XX:XX:XX:XX:XX:XX hexadecimal
+     *                          format. Only 0-9 and a-f are allowed
+     * @param string $ipAddress IP Address in the network or Network address of the network.
+     * @param string $subnetMask Subnet Mask as a string
+     * @param int $port Target port to send magic packet, 7 or 9
+     * @return array Detailed results array with result, bytes sent and a message for each given magic packet
      *
-     * @var array
+     * @throws Exception
      */
-    protected $magicPackets = [];
-
-    /**
-     * Broadcast enabled UDP Socket.
-     *
-     * @var UdpBroadcastSocket
-     */
-    protected $udpBroadcastSocket;
-
-    /**
-     * PHPWakeOnLan constructor.
-     *
-     * @param  string  $broadcastAddress  String containing target broadcast address in XXX.XXX.XXX.255 format
-     * @param  int|null  $port  Target port to send magic packet, 7 or 9
-     */
-    public function __construct(
-        string $broadcastAddress = null,
-        int $port = null
-    ) {
-        $this->broadcastAddress = $broadcastAddress ?? $this->broadcastAddress;
-        if (! self::isBroadcastAddressValid($this->broadcastAddress)) {
-            throw new RuntimeException('Error: Invalid Broadcast address ['.$broadcastAddress.'].', 3);
-        }
-
-        $this->port = $port ?? $this->port;
-        if (! in_array($this->port, [7, 9], true)) {
+    public function wake(string $macAddress, string $ipAddress, string $subnetMask = '255.255.255.0', int $port = 7): array
+    {
+        if (!in_array($port, [7, 9], true)) {
             throw new RuntimeException('Error: Invalid port ['.$port.']. Must be 7 or 9.', 4);
         }
 
-        $this->udpBroadcastSocket = new UdpBroadcastSocket();
-    }
+        $udpBroadcastSocket = new UdpBroadcastSocket();
+        $magicPacket = new MagicPacket($macAddress);
+        $cidr = new CidrNetwork($ipAddress, $subnetMask);
 
-    /**
-     * Perform a simple IPV4 broadcast address validation.
-     *
-     * @param  string  $broadcastAddress  String containing target broadcast address in XXX.XXX.XXX.255 format
-     * @return bool True if given broadcast address is valid
-     */
-    public static function isBroadcastAddressValid(string $broadcastAddress): bool
-    {
-        $broadcastAddress = trim($broadcastAddress);
+        $bytes = $udpBroadcastSocket->send($magicPacket, $cidr->getBroadcastAddress(), $port);
+        $udpBroadcastSocket->close();
 
-        return ip2long($broadcastAddress)
-            && 0 < preg_match("/^[1,2]\d{1,2}\.[1,2]\d{1,2}\.[1,2]\d{0,2}\.255$/", $broadcastAddress);
-    }
+        $sendOk = ! empty($bytes) && $bytes > 0;
+        $message = $sendOk ? 'Magic packet sent' : '0 bytes sent';
+        $message .= ' to ' . $macAddress . ' through ' . $cidr->getBroadcastAddress();
 
-    /**
-     * Wake up target devices using given mac address(es) to build magic packets
-     * and send them to broadcast address.
-     *
-     * @param  array  $macAddresses  Array of mac addresses (or a single string) in XX:XX:XX:XX:XX:XX hexadecimal
-     *                               format. Only 0-9 and a-f are allowed
-     * @param  CidrNetwork|null  $cidrNetwork  CIDR Network DTO to be able to use CIDR Network Broadcast Addresses.
-     * @return array Detailed results array with result, bytes sent and a message for each given magic packet
-     *
-     * @throws \Exception
-     */
-    public function wake(array $macAddresses, ?CidrNetwork $cidrNetwork = null): array
-    {
-        foreach ($macAddresses as $macAddress) {
-            $this->magicPackets[] = new MagicPacket($macAddress);
-        }
-        $result = [];
-        foreach ($this->magicPackets as $magicPacket) {
-            $macAddress = $magicPacket->getMacAddress();
-            $bytes = $this->udpBroadcastSocket->send($magicPacket, $cidrNetwork ? $cidrNetwork->getBroadcastAddress() : $this->broadcastAddress, $this->port);
-            $sendOk = ! empty($bytes) && $bytes > 0;
-            $message = $sendOk ? 'Magic packet sent' : '0 bytes sent';
-            $message .= ' to '.$macAddress.' through '.($cidrNetwork ? $cidrNetwork->getBroadcastAddress() : $this->broadcastAddress);
-
-            $result[$macAddress] = [
-                'result' => $sendOk ? 'OK' : 'KO',
-                'message' => $message,
-                'bytes_sent' => $bytes,
-            ];
-        }
-        $this->udpBroadcastSocket->close();
-
-        return count($result) > 1 ? $result : $result[$this->magicPackets[0]->getMacAddress()];
+        return [
+            'result' => $sendOk ? 'OK' : 'KO',
+            'message' => $message,
+            'bytes_sent' => $bytes,
+        ];
     }
 }

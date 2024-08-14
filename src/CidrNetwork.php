@@ -1,19 +1,19 @@
 <?php
 
-namespace Diegonz\PHPWakeOnLan;
+namespace SuperCid\PHPWakeOnLan;
 
 use RuntimeException;
 
 class CidrNetwork
 {
     /** @var string */
-    protected $networkAddress;
+    private $networkAddress;
 
     /** @var string */
-    protected $subnetMask;
+    private $subnetMask;
 
     /** @var string */
-    protected $broadcastAddress;
+    private $broadcastAddress;
 
     /**
      * @param  string  $ipAddress  IP Address in the network or Network address of the network.
@@ -38,22 +38,22 @@ class CidrNetwork
         $this->broadcastAddress = $this->calculateBroadcastAddress($ipAddress, $subnetMask);
     }
 
-    protected function validIpv4Address(string $ipAddress): bool
+    private function validIpv4Address(string $ipAddress): bool
     {
         return (bool) filter_var($ipAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
 
-    protected function calculateBroadcastAddress(string $networkAddress, string $subnetMask): string
+    private function calculateBroadcastAddress(string $networkAddress, string $subnetMask): string
     {
         return long2ip(ip2long($networkAddress) | ~ip2long($subnetMask));
     }
 
-    protected function calculateNetworkAddress(string $ipAddress, string $subnetMask): string
+    private function calculateNetworkAddress(string $ipAddress, string $subnetMask): string
     {
         return long2ip(ip2long($ipAddress) & ip2long($subnetMask));
     }
 
-    protected function getSubnetMaskFromCidrBits(int $numberOfBits): string
+    private function getSubnetMaskFromCidrBits(int $numberOfBits): string
     {
         // Create the 32 bit subnet mask
         $binary = '';
