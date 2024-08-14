@@ -1,9 +1,6 @@
 # PHPWakeOnLan
 
-[![Travis Build Status](https://img.shields.io/travis/diegonz/PHPWakeOnLan/master.svg?style=flat-square)](https://travis-ci.org/diegonz/PHPWakeOnLan)
-[![StyleCI Status](https://github.styleci.io/repos/128269954/shield?branch=master)](https://github.styleci.io/repos/128269954)
-[![Codecov Status](https://img.shields.io/codecov/c/github/diegonz/PHPWakeOnLan.svg?style=flat-square)](https://codecov.io/gh/diegonz/PHPWakeOnLan)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/diegonz/php-wake-on-lan.svg?style=flat-square)](https://packagist.org/packages/diegonz/php-wake-on-lan)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/supercid/php-wake-on-lan.svg?style=flat-square)](https://packagist.org/packages/supercid/php-wake-on-lan)
 
 Wake on lan target enabled devices by sending magic packets to them from PHP.
 
@@ -12,7 +9,7 @@ Wake on lan target enabled devices by sending magic packets to them from PHP.
 Require the package using [composer](https://getcomposer.org/):
 
 ```bash
-composer require diegonz/php-wake-on-lan
+composer require supercid/php-wake-on-lan
 ```
 
 ## Usage:
@@ -22,16 +19,14 @@ Normal PHP usage:
 ```php
 <?php
 
-use \Diegonz\PHPWakeOnLan\PHPWakeOnLan;
+use \SuperCid\PHPWakeOnLan\PHPWakeOnLan;
 
-$macAddresses = [
-    '00:1B:2C:1C:DF:22',
-    '01:1C:2C:1C:DF:13',
-];
+$macAddress = '00:1B:2C:1C:DF:22';
+$ipAddress = '192.168.0.1';
 
 try {
     $wol = new PHPWakeOnLan();
-    print_r($wol->wake($macAddresses));
+    print_r($wol->wake($macAddress, $ipAddress));
 } catch (Exception $e) {
     var_dump($e->getMessage());
 }
@@ -42,15 +37,13 @@ Laravel facade usage:
 ```php
 <?php
 
-use \Diegonz\PHPWakeOnLan\Facades\PHPWakeOnLan;
+use \SuperCid\PHPWakeOnLan\Facades\PHPWakeOnLan;
 
-$macAddresses = [
-    '00:1B:2C:1C:DF:22',
-    '01:1C:2C:1C:DF:13',
-];
+$macAddress = '00:1B:2C:1C:DF:22';
+$ipAddress = '192.168.0.1';
 
 try {
-    print_r(PHPWakeOnLan::wake($macAddresses));
+    print_r(PHPWakeOnLan::wake($macAddress, $ipAddress));
 } catch (Exception $e) {
     var_dump($e->getMessage());
 }
@@ -82,7 +75,7 @@ Array
 You can publish laravel package configuration file running the command below:
 
 ```bash
-php artisan vendor:publish --provider="Diegonz\PHPWakeOnLan\PHPWakeOnLanServiceProvider" --tag="config"
+php artisan vendor:publish --provider="SuperCid\PHPWakeOnLan\PHPWakeOnLanServiceProvider" --tag="config"
 ```
 
 ### Testing
@@ -109,8 +102,11 @@ White paper describing the specification and implementation of Magic Packet™
 technology from AMD, one of its two co-developers.
 
 ## Credits
-
+Original work from
 - [Diego González](https://github.com/diegonz)
+
+Forked by 
+- [Cid Lopes](https://github.com/supercid)
 
 ## License
 

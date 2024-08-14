@@ -1,8 +1,8 @@
 <?php
 
-namespace Diegonz\PHPWakeOnLan;
+namespace SuperCid\PHPWakeOnLan;
 
-use Diegonz\PHPWakeOnLan\Socket\UdpBroadcastSocket;
+use SuperCid\PHPWakeOnLan\Socket\UdpBroadcastSocket;
 use Exception;
 use RuntimeException;
 

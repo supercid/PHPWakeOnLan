@@ -1,8 +1,8 @@
 <?php
 
-namespace Diegonz\PHPWakeOnLan;
+namespace SuperCid\PHPWakeOnLan;
 
-use Diegonz\PHPWakeOnLan\Console\Wol;
+use SuperCid\PHPWakeOnLan\Console\Wol;
 use Illuminate\Support\ServiceProvider;
 
 /**

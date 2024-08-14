@@ -1,21 +1,21 @@
 <?php
 
-namespace Diegonz\PHPWakeOnLan\Tests;
+namespace SuperCid\PHPWakeOnLan\Tests;
 
-use Diegonz\PHPWakeOnLan\CidrNetwork;
-use Diegonz\PHPWakeOnLan\PHPWakeOnLan;
+use SuperCid\PHPWakeOnLan\CidrNetwork;
+use SuperCid\PHPWakeOnLan\PHPWakeOnLan;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class PHPWakeOnLanTest.
  *
- * @covers \Diegonz\PHPWakeOnLan\PHPWakeOnLan
+ * @covers \SuperCid\PHPWakeOnLan\PHPWakeOnLan
  */
 class PHPWakeOnLanTest extends TestCase
 {
 
     /**
-     * @covers \Diegonz\PHPWakeOnLan\PHPWakeOnLan::wake()
+     * @covers \SuperCid\PHPWakeOnLan\PHPWakeOnLan::wake()
      *
      * @throws \Exception
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Diegonz\PHPWakeOnLan\Socket;
+namespace SuperCid\PHPWakeOnLan\Socket;
 
 use RuntimeException;
 
@@ -10,9 +10,9 @@ use RuntimeException;
 class Socket
 {
     /**
-     * @var resource
+     * @var \Socket
      */
-    protected $socket;
+    private $socket;
 
     /**
      * Socket constructor.
@@ -56,9 +56,9 @@ class Socket
     }
 
     /**
-     * @return resource
+     * @return \Socket
      */
-    public function getSocket()
+    public function getSocket(): \Socket
     {
         return $this->socket;
     }

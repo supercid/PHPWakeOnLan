@@ -1,5 +1,5 @@
 {
-    "name": "diegonz/php-wake-on-lan",
+    "name": "supercid/php-wake-on-lan",
     "description": "Wake on lan target enabled devices by sending magic packets to them from PHP",
     "keywords": [
         "lan",
@@ -7,7 +7,7 @@
         "wakeonlan",
         "magicpacket"
     ],
-    "homepage": "https://github.com/diegonz/php-wake-on-lan",
+    "homepage": "https://github.com/supercid/php-wake-on-lan",
     "license": "MIT",
     "type": "library",
     "minimum-stability": "stable",
@@ -15,10 +15,14 @@
         {
             "name": "Diego González",
             "role": "Developer"
+        },
+        {
+            "name": "Cid Lopes",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php": "^7.1.8|^8.0",
+        "php": "^8.0",
         "ext-ctype": "*",
         "ext-sockets": "*"
     },
@@ -28,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Diegonz\\PHPWakeOnLan\\": "src"
+            "SuperCid\\PHPWakeOnLan\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Diegonz\\PHPWakeOnLan\\Tests\\": "tests"
+            "SuperCid\\PHPWakeOnLan\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -42,15 +46,5 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Diegonz\\PHPWakeOnLan\\PHPWakeOnLanServiceProvider"
-            ],
-            "aliases": {
-                "PHPWakeOnLan": "Diegonz\\PHPWakeOnLan\\Facades\\PHPWakeOnLan"
-            }
-        }
     }
 }
